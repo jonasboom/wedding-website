@@ -184,23 +184,23 @@ $(document).ready(function () {
         },
         data: {
             // Event title
-            title: "Ram and Antara's Wedding",
+            title: "Hochzeit Steffi und Jonathan",
 
             // Event start date
-            start: new Date('Nov 27, 2017 10:00'),
+            start: new Date('May 08, 2026 15:30'),
 
             // Event duration (IN MINUTES)
             // duration: 120,
 
             // You can also choose to set an end time
             // If an end time is set, this will take precedence over duration
-            end: new Date('Nov 29, 2017 00:00'),
+            end: new Date('May 09, 2026 01:30'),
 
             // Event Address
-            address: 'ITC Fortune Park Hotel, Kolkata',
+            address: 'Eisengießerei Westwerk, Karl-Heine-Straße 93b, 04229 Leipzig',
 
             // Event Description
-            description: "We can't wait to see you on our big day. For any queries or issues, please contact Mr. Amit Roy at +91 9876543210."
+            description: "Wir freuen uns auf euch! Bei Fragen oder Anmerkungen, meldet euch bitte bei unseren Trauzeugen unter ..."
         }
     });
 
@@ -241,7 +241,7 @@ $(document).ready(function () {
 
 // Google map
 function initMap() {
-    var location = {lat: 22.5932759, lng: 88.27027720000001};
+    var location = {lat: 51.32985338782048, lng: 12.331083345581323};
     var map = new google.maps.Map(document.getElementById('map-canvas'), {
         zoom: 15,
         center: location,
@@ -255,15 +255,15 @@ function initMap() {
 }
 
 function initBBSRMap() {
-    var la_fiesta = {lat: 20.305826, lng: 85.85480189999998};
+    var standesamt = {lat: 51.3369255065918, lng: 12.373165130615234};
     var map = new google.maps.Map(document.getElementById('map-canvas'), {
         zoom: 15,
-        center: la_fiesta,
+        center: standesamt,
         scrollwheel: false
     });
 
     var marker = new google.maps.Marker({
-        position: la_fiesta,
+        position: standesamt,
         map: map
     });
 }
