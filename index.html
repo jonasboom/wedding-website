@@ -61,11 +61,11 @@
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" onerror="loadCssFromCDN('font-awesome.css')">
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
 	<style>
-  /* 🔒 Password overlay */
+  /* 🔒 Password Overlay Styling */
   #password-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
     display: flex;
     flex-direction: column;
@@ -73,7 +73,20 @@
     justify-content: center;
     z-index: 99999;
     text-align: center;
+    opacity: 1;
+    transition: opacity 0.8s ease;
   }
+
+  #password-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #password-overlay h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
   #password-overlay input {
     padding: 12px;
     font-size: 16px;
@@ -82,7 +95,9 @@
     outline: none;
     margin-top: 10px;
     text-align: center;
+    width: 200px;
   }
+
   #password-overlay button {
     margin-top: 12px;
     padding: 10px 20px;
@@ -92,22 +107,27 @@
     color: white;
     font-size: 16px;
     cursor: pointer;
+    transition: background 0.3s ease;
   }
+
   #password-overlay button:hover {
     background: #1d4ed8;
   }
+
   #error {
     color: #f87171;
     margin-top: 10px;
     min-height: 1.2em;
   }
+
   body.locked > *:not(#password-overlay) {
     display: none !important;
   }
 </style>
 </head>
 <body class =locked id="top">
-	<div id="password-overlay">
+	<!-- 🔐 Password Overlay -->
+  <div id="password-overlay">
     <h2>Bitte Passwort eingeben</h2>
     <input type="password" id="password-input" placeholder="Passwort..." />
     <button id="submit-btn">Freischalten</button>
@@ -116,17 +136,24 @@
 
   <script>
     const CORRECT_PASSWORD = "hochzeit2025"; // 💍 Change this!
+    const STORAGE_KEY = "weddingUnlocked";
 
     const overlay = document.getElementById("password-overlay");
     const input = document.getElementById("password-input");
     const error = document.getElementById("error");
+    const btn = document.getElementById("submit-btn");
 
     function unlock() {
-      document.body.classList.remove("locked");
-      overlay.remove();
+      overlay.classList.add("fade-out");
+      setTimeout(() => {
+        overlay.remove();
+        document.body.classList.remove("locked");
+      }, 800);
+      // Persist unlock across browser sessions
+      localStorage.setItem(STORAGE_KEY, "true");
     }
 
-    document.getElementById("submit-btn").addEventListener("click", () => {
+    function checkPassword() {
       if (input.value === CORRECT_PASSWORD) {
         unlock();
       } else {
@@ -134,11 +161,20 @@
         input.value = "";
         input.focus();
       }
+    }
+
+    btn.addEventListener("click", checkPassword);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") checkPassword();
     });
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        document.getElementById("submit-btn").click();
+    window.addEventListener("load", () => {
+      // Check if previously unlocked
+      if (localStorage.getItem(STORAGE_KEY) === "true") {
+        overlay.remove();
+        document.body.classList.remove("locked");
+      } else {
+        input.focus();
       }
     });
   </script>
