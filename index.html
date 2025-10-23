@@ -136,12 +136,18 @@
     <div id="error"></div>
   </div>
 
+  <!-- Your normal content -->
+  <div class="survey-container" id="form-container">
+    <!-- iframe will be inserted here after unlock -->
+  </div>
+
   <style>
+    /* Overlay styling */
     #password-overlay {
       position: fixed;
       inset: 0;
-      background: #ffffff; /* light background so black dots are visible */
-      color: black;
+      background: rgba(0,0,0,0.9);
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -151,12 +157,14 @@
       opacity: 1;
       transition: opacity 0.8s ease;
     }
-
     #password-overlay.fade-out {
       opacity: 0;
       pointer-events: none;
     }
-
+    #password-overlay h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
     #password-overlay input {
       padding: 12px;
       font-size: 16px;
@@ -169,7 +177,6 @@
       color: black;
       background: white;
     }
-
     #password-overlay button {
       margin-top: 12px;
       padding: 10px 20px;
@@ -181,11 +188,9 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
     #password-overlay button:hover {
       background: #1d4ed8;
     }
-
     #error {
       color: #b91c1c;
       margin-top: 10px;
@@ -198,20 +203,33 @@
   </style>
 
   <script>
-    const CORRECT_PASSWORD = "hochzeit2025";
+    const CORRECT_PASSWORD = "hochzeit2025"; // 💍 Change your password
     const STORAGE_KEY = "weddingUnlocked";
 
     const overlay = document.getElementById("password-overlay");
     const input = document.getElementById("password-input");
     const error = document.getElementById("error");
     const btn = document.getElementById("submit-btn");
+    const formContainer = document.getElementById("form-container");
 
     function unlock() {
       overlay.classList.add("fade-out");
       setTimeout(() => {
         overlay.remove();
         document.body.classList.remove("locked");
+
+        // Insert Microsoft Forms iframe
+        if (!document.querySelector("#form-container iframe")) {
+          const iframe = document.createElement("iframe");
+          iframe.src = "https://forms.office.com/e/CZa5mL53ZJ";
+          iframe.width = "100%";
+          iframe.height = "600";
+          iframe.frameBorder = "0";
+          iframe.style.border = "none";
+          formContainer.appendChild(iframe);
+        }
       }, 800);
+
       localStorage.setItem(STORAGE_KEY, "true");
     }
 
@@ -231,14 +249,27 @@
     });
 
     window.addEventListener("load", () => {
+      // Auto-unlock if previously unlocked
       if (localStorage.getItem(STORAGE_KEY) === "true") {
         overlay.remove();
         document.body.classList.remove("locked");
+
+        // Ensure iframe is loaded
+        if (!document.querySelector("#form-container iframe")) {
+          const iframe = document.createElement("iframe");
+          iframe.src = "https://forms.office.com/e/CZa5mL53ZJ";
+          iframe.width = "100%";
+          iframe.height = "600";
+          iframe.frameBorder = "0";
+          iframe.style.border = "none";
+          formContainer.appendChild(iframe);
+        }
       } else {
         input.focus();
       }
     });
   </script>
+
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
