@@ -60,8 +60,88 @@
     <link rel="stylesheet" href="node_modules/animate.css/animate.min.css" onerror="loadCssFromCDN('animate.css')">
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" onerror="loadCssFromCDN('font-awesome.css')">
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+	<style>
+  /* 🔒 Password overlay */
+  #password-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    text-align: center;
+  }
+  #password-overlay input {
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    margin-top: 10px;
+    text-align: center;
+  }
+  #password-overlay button {
+    margin-top: 12px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #password-overlay button:hover {
+    background: #1d4ed8;
+  }
+  #error {
+    color: #f87171;
+    margin-top: 10px;
+    min-height: 1.2em;
+  }
+  body.locked > *:not(#password-overlay) {
+    display: none !important;
+  }
+</style>
 </head>
-<body id="top">
+<body class =locked id="top">
+	<div id="password-overlay">
+    <h2>Bitte Passwort eingeben</h2>
+    <input type="password" id="password-input" placeholder="Passwort..." />
+    <button id="submit-btn">Freischalten</button>
+    <div id="error"></div>
+  </div>
+
+  <script>
+    const CORRECT_PASSWORD = "hochzeit2025"; // 💍 Change this!
+
+    const overlay = document.getElementById("password-overlay");
+    const input = document.getElementById("password-input");
+    const error = document.getElementById("error");
+
+    function unlock() {
+      document.body.classList.remove("locked");
+      overlay.remove();
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", () => {
+      if (input.value === CORRECT_PASSWORD) {
+        unlock();
+      } else {
+        error.textContent = "Falsches Passwort.";
+        input.value = "";
+        input.focus();
+      }
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("submit-btn").click();
+      }
+    });
+  </script>
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
