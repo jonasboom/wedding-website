@@ -519,5 +519,14 @@
       }
     });
   </script>
+  <script>
+  // Prevent page from scrolling down on load
+  window.addEventListener("load", () => {
+    // Reset scroll to top
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 10); // tiny delay ensures other scripts run first
+  });
+</script>
 </body>
 </html>
