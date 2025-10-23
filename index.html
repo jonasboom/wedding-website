@@ -60,89 +60,8 @@
     <link rel="stylesheet" href="node_modules/animate.css/animate.min.css" onerror="loadCssFromCDN('animate.css')">
     <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" onerror="loadCssFromCDN('font-awesome.css')">
     <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-	<style>
-  /* 🔒 Password Overlay Styling */
-  #password-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-    text-align: center;
-    opacity: 1;
-    transition: opacity 0.8s ease;
-  }
-
-  #password-overlay.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  #password-overlay h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-
-  #password-overlay input {
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    outline: none;
-    margin-top: 10px;
-    text-align: center;
-    width: 200px;
-  }
-
-  #password-overlay button {
-    margin-top: 12px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background: #2563eb;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  #password-overlay button:hover {
-    background: #1d4ed8;
-  }
-
-  #error {
-    color: #f87171;
-    margin-top: 10px;
-    min-height: 1.2em;
-  }
-
-  body.locked > *:not(#password-overlay) {
-  visibility: hidden;   /* keep layout, allow iframe to load */
-  height: 0;
-  overflow: hidden;
-}
-</style>
-</head>
-<body class =locked id="top">
-	<!-- 🔐 Password Overlay -->
-  <div id="password-overlay">
-    <h2>Bitte Passwort eingeben</h2>
-    <input type="password" id="password-input" placeholder="Passwort..." autocomplete="current-password" />
-    <button id="submit-btn">Freischalten</button>
-    <div id="error"></div>
-  </div>
-
-  <!-- Your normal content -->
-  <div class="survey-container" id="form-container">
-    <!-- iframe will be inserted here after unlock -->
-  </div>
-
+	<!-- Password overlay CSS -->
   <style>
-    /* Overlay styling */
     #password-overlay {
       position: fixed;
       inset: 0;
@@ -157,118 +76,60 @@
       opacity: 1;
       transition: opacity 0.8s ease;
     }
+
     #password-overlay.fade-out {
       opacity: 0;
       pointer-events: none;
     }
+
     #password-overlay h2 {
       font-size: 1.8rem;
       margin-bottom: 1rem;
     }
+
     #password-overlay input {
       padding: 12px;
       font-size: 16px;
-      border: 1px solid #ccc;
       border-radius: 8px;
-      outline: none;
       margin-top: 10px;
+      width: 220px;
       text-align: center;
-      width: 200px;
+      outline: none;
       color: black;
       background: white;
     }
+
     #password-overlay button {
       margin-top: 12px;
       padding: 10px 20px;
-      border: none;
       border-radius: 8px;
       background: #2563eb;
       color: white;
-      font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      font-size: 16px;
     }
+
     #password-overlay button:hover {
       background: #1d4ed8;
     }
+
     #error {
       color: #b91c1c;
       margin-top: 10px;
       min-height: 1.2em;
     }
-
-    body.locked > *:not(#password-overlay) {
-      display: none !important;
-    }
   </style>
+</head>
+<body class =locked id="top">
+	<!-- 🔐 Password Overlay -->
+  <div id="password-overlay">
+    <h2>Bitte Passwort eingeben</h2>
+    <input type="password" id="password-input" placeholder="Passwort..." autocomplete="current-password" />
+    <button id="submit-btn">Freischalten</button>
+    <div id="error"></div>
+  </div>
 
-  <script>
-    const CORRECT_PASSWORD = "hochzeit2025"; // 💍 Change your password
-    const STORAGE_KEY = "weddingUnlocked";
-
-    const overlay = document.getElementById("password-overlay");
-    const input = document.getElementById("password-input");
-    const error = document.getElementById("error");
-    const btn = document.getElementById("submit-btn");
-    const formContainer = document.getElementById("form-container");
-
-    function unlock() {
-      overlay.classList.add("fade-out");
-      setTimeout(() => {
-        overlay.remove();
-        document.body.classList.remove("locked");
-
-        // Insert Microsoft Forms iframe
-        if (!document.querySelector("#form-container iframe")) {
-          const iframe = document.createElement("iframe");
-          iframe.src = "https://forms.office.com/e/CZa5mL53ZJ";
-          iframe.width = "100%";
-          iframe.height = "600";
-          iframe.frameBorder = "0";
-          iframe.style.border = "none";
-          formContainer.appendChild(iframe);
-        }
-      }, 800);
-
-      localStorage.setItem(STORAGE_KEY, "true");
-    }
-
-    function checkPassword() {
-      if (input.value === CORRECT_PASSWORD) {
-        unlock();
-      } else {
-        error.textContent = "Falsches Passwort.";
-        input.value = "";
-        input.focus();
-      }
-    }
-
-    btn.addEventListener("click", checkPassword);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") checkPassword();
-    });
-
-    window.addEventListener("load", () => {
-      // Auto-unlock if previously unlocked
-      if (localStorage.getItem(STORAGE_KEY) === "true") {
-        overlay.remove();
-        document.body.classList.remove("locked");
-
-        // Ensure iframe is loaded
-        if (!document.querySelector("#form-container iframe")) {
-          const iframe = document.createElement("iframe");
-          iframe.src = "https://forms.office.com/e/CZa5mL53ZJ";
-          iframe.width = "100%";
-          iframe.height = "600";
-          iframe.frameBorder = "0";
-          iframe.style.border = "none";
-          formContainer.appendChild(iframe);
-        }
-      } else {
-        input.focus();
-      }
-    });
-  </script>
+  
 
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
@@ -573,7 +434,7 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <h3>Über das Formular könnt ihr euch anmelden</h3>
-                <p>Wir bitten um eine Rückmeldung bis zum 31.12.2025</p>
+                <p>Wir bitten um eine Rückmeldung bis zum 15.12.2025</p>
             </div>
 			<div class="survey-container">
 				<iframe src="https://forms.office.com/e/CZa5mL53ZJ"
@@ -620,5 +481,43 @@
     ga('create', 'UA-46465113-4', 'auto');
     ga('send', 'pageview');
 </script>
+	<script>
+    const CORRECT_PASSWORD = "hochzeit2025";
+    const STORAGE_KEY = "weddingUnlocked";
+
+    const overlay = document.getElementById("password-overlay");
+    const input = document.getElementById("password-input");
+    const error = document.getElementById("error");
+    const btn = document.getElementById("submit-btn");
+
+    function unlock() {
+      overlay.classList.add("fade-out");
+      setTimeout(() => overlay.remove(), 800);
+      localStorage.setItem(STORAGE_KEY, "true");
+    }
+
+    function checkPassword() {
+      if (input.value === CORRECT_PASSWORD) {
+        unlock();
+      } else {
+        error.textContent = "Falsches Passwort.";
+        input.value = "";
+        input.focus();
+      }
+    }
+
+    btn.addEventListener("click", checkPassword);
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") checkPassword();
+    });
+
+    window.addEventListener("load", () => {
+      if (localStorage.getItem(STORAGE_KEY) === "true") {
+        overlay.remove();
+      } else {
+        input.focus();
+      }
+    });
+  </script>
 </body>
 </html>
