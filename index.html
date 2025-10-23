@@ -121,8 +121,10 @@
   }
 
   body.locked > *:not(#password-overlay) {
-    display: none !important;
-  }
+  visibility: hidden;   /* keep layout, allow iframe to load */
+  height: 0;
+  overflow: hidden;
+}
 </style>
 </head>
 <body class =locked id="top">
