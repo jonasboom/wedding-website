@@ -316,7 +316,7 @@ section .header{
 }
 .hero{
     min-height:750px;
-    background:url("../img/IMG_20251025_172337_522.jpg") center center;
+    background:url("../bild-wir.jpg") center center;
     -webkit-background-size:cover;
     -moz-background-size:cover;
     -o-background-size:cover;
